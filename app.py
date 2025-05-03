@@ -66,7 +66,7 @@ def login_page():
                     st.error("Invalid username or password")
         
         # Show demo credentials for testing
-        st.info("Demo credentials: Username: admin, Password: password123")
+        # st.info("Demo credentials: Username: admin, Password: password123")
 
 # Main App
 def main_app():
