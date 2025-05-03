@@ -86,7 +86,10 @@ if page == "Map Analysis":
         # Add tile layer control with data science oriented themes
         folium.TileLayer('CartoDB dark_matter').add_to(m)
         folium.TileLayer('CartoDB positron').add_to(m)
-        folium.TileLayer('Stamen Toner').add_to(m)
+        folium.TileLayer(
+            'Stamen Toner',
+            attr='Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.'
+        ).add_to(m)
         folium.LayerControl().add_to(m)
         
         # Add mining locations with enhanced markers using data science color palette
@@ -470,4 +473,5 @@ elif page == "Stakeholder Analysis":
 # Footer
 st.markdown("---")
 st.markdown("© 2023 Nickel Mining Analysis Dashboard | Data is simulated for demonstration purposes")
+
 
