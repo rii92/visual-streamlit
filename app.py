@@ -157,21 +157,27 @@ if page == "Map Analysis":
         folium_static(m, width=1400, height=600)
     
     with map_tabs[1]:
-        # Heatmap view with data science styling
+        # Alternative to heatmap using circle markers
         heatmap = folium.Map(location=[-3.0, 120.0], zoom_start=6, tiles="CartoDB dark_matter")
         
-        # Prepare heatmap data
-        heat_data = []
+        # Create a heat-like visualization using circle markers
         for idx, row in mining_data.iterrows():
-            # Weight by area change
             weight = (row['area_2023'] - row['area_2020']) / 10
-            heat_data.append([row['lat'], row['lon'], weight])
+            
+            # Color based on weight
+            color = '#3498db' if weight < 10 else '#f39c12' if weight < 20 else '#e74c3c'
+            
+            folium.CircleMarker(
+                location=[row['lat'], row['lon']],
+                radius=weight,  # Size based on weight
+                color=color,
+                fill=True,
+                fill_color=color,
+                fill_opacity=0.7,
+                popup=f"{row['name']}: Change of {row['area_2023'] - row['area_2020']} ha"
+            ).add_to(heatmap)
         
-        # Add heatmap layer with data science gradient
-        from folium.plugins import HeatMap
-        HeatMap(heat_data, radius=25, gradient={0.2: '#3498db', 0.5: '#f39c12', 0.8: '#e74c3c'}).add_to(heatmap)
-        
-        # Display the heatmap with full width
+        # Display the map with full width
         folium_static(heatmap, width=1400, height=600)
     
     with map_tabs[2]:
@@ -473,5 +479,7 @@ elif page == "Stakeholder Analysis":
 # Footer
 st.markdown("---")
 st.markdown("© 2023 Nickel Mining Analysis Dashboard | Data is simulated for demonstration purposes")
+
+
 
 
