@@ -70,7 +70,7 @@ def login_page():
 
 # Main App
 def main_app():
-    mining_loc = gpd.read_file("https://raw.githubusercontent.com/rii92/visual-streamlit/refs/heads/main/mining_area_idn.geojson")
+    # mining_loc = gpd.read_file("https://raw.githubusercontent.com/rii92/visual-streamlit/refs/heads/main/mining_area_idn.geojson")
     # App title and description
     st.title("Nickel Mining Analysis Dashboard")
     st.markdown("Analysis of nickel mining operations, land changes, and financial implications")
@@ -150,7 +150,7 @@ def main_app():
             # Enhanced interactive map with data science color scheme
             m = folium.Map(location=[-3.0, 120.0], zoom_start=6, tiles="CartoDB positron")
             folium.GeoJson(
-                mining_loc,
+                "https://raw.githubusercontent.com/rii92/visual-streamlit/refs/heads/main/mining_area_idn.geojson",
                 style_function=lambda feature: {
                     'fillColor': 'green',
                     'fillOpacity': '0.7',
