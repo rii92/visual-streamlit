@@ -70,7 +70,7 @@ def login_page():
 
 # Main App
 def main_app():
-    mining_loc = gpd.read_file("mining_area_idn.geojson")
+    mining_loc = gpd.read_file("https://raw.githubusercontent.com/rii92/visual-streamlit/refs/heads/main/mining_area_idn.geojson")
     # App title and description
     st.title("Nickel Mining Analysis Dashboard")
     st.markdown("Analysis of nickel mining operations, land changes, and financial implications")
