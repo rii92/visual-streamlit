@@ -61,7 +61,7 @@ def login_page():
                 if username in credentials and check_password(password, credentials[username]):
                     st.session_state['logged_in'] = True
                     st.success("Login successful!")
-                    st.experimental_rerun()
+                    st.rerun()
                 else:
                     st.error("Invalid username or password")
         
@@ -70,6 +70,7 @@ def login_page():
 
 # Main App
 def main_app():
+    mining_loc = gpd.read_file("mining_area_idn.geojson")
     # App title and description
     st.title("Nickel Mining Analysis Dashboard")
     st.markdown("Analysis of nickel mining operations, land changes, and financial implications")
@@ -148,6 +149,15 @@ def main_app():
         with map_tabs[0]:
             # Enhanced interactive map with data science color scheme
             m = folium.Map(location=[-3.0, 120.0], zoom_start=6, tiles="CartoDB positron")
+            folium.GeoJson(
+                mining_loc,
+                style_function=lambda feature: {
+                    'fillColor': 'green',
+                    'fillOpacity': '0.7',
+                    'color': 'red',
+                    'weight': 1.5,
+                    # 'dashArray': '5, 5'
+                }).add_to(m)
             
             # Add tile layer control with data science oriented themes
             folium.TileLayer('CartoDB dark_matter').add_to(m)
@@ -178,26 +188,26 @@ def main_app():
                 color = '#3498db' if area_change < 100 else '#f39c12' if area_change < 200 else '#e74c3c'
                 
                 # Create a circle marker with data science styling
-                folium.CircleMarker(
-                    location=[row['lat'], row['lon']],
-                    radius=area_change/20,  # Size based on change
-                    popup=folium.Popup(popup_text, max_width=300),
-                    color=color,
-                    fill=True,
-                    fill_opacity=0.8,
-                    fill_color=color,
-                    weight=2
-                ).add_to(m)
+                # folium.CircleMarker(
+                #     location=[row['lat'], row['lon']],
+                #     radius=area_change/20,  # Size based on change
+                #     popup=folium.Popup(popup_text, max_width=300),
+                #     color=color,
+                #     fill=True,
+                #     fill_opacity=0.8,
+                #     fill_color=color,
+                #     weight=2
+                # ).add_to(m)
                 
                 # Add mine name as a marker with improved styling
-                folium.Marker(
-                    location=[row['lat'], row['lon']],
-                    icon=folium.DivIcon(
-                        icon_size=(150, 36),
-                        icon_anchor=(75, 0),
-                        html=f'<div style="font-size: 12pt; font-weight: bold; color: #2c3e50; background-color: rgba(255,255,255,0.8); padding: 4px 8px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">{row["name"]}</div>'
-                    )
-                ).add_to(m)
+                # folium.Marker(
+                #     location=[row['lat'], row['lon']],
+                #     icon=folium.DivIcon(
+                #         icon_size=(150, 36),
+                #         icon_anchor=(75, 0),
+                #         html=f'<div style="font-size: 12pt; font-weight: bold; color: #2c3e50; background-color: rgba(255,255,255,0.8); padding: 4px 8px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">{row["name"]}</div>'
+                #     )
+                # ).add_to(m)
             
             # Add a modern legend with data science styling
             legend_html = '''
@@ -218,9 +228,10 @@ def main_app():
             </div>
             '''
             m.get_root().html.add_child(folium.Element(legend_html))
-            
+            # m.fit_bounds(layer.get_bounds())
             # Display the map with full width
             folium_static(m, width=1400, height=600)
+            
         
         with map_tabs[1]:
             # Alternative to heatmap using circle markers
