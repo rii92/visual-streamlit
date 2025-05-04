@@ -150,7 +150,7 @@ def main_app():
             # Enhanced interactive map with data science color scheme
             m = folium.Map(location=[-3.0, 120.0], zoom_start=6, tiles="CartoDB positron")
             folium.GeoJson(
-                "https://raw.githubusercontent.com/rii92/visual-streamlit/refs/heads/main/mining_area_idn.geojson",
+                mining_loc,
                 style_function=lambda feature: {
                     'fillColor': 'green',
                     'fillOpacity': '0.7',
