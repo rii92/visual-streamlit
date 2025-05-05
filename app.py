@@ -281,9 +281,9 @@ def main_app():
             
             # Add satellite imagery
             folium.TileLayer(
-                tiles='https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-                attr='Esri',
-                name='Esri Satellite',
+                tiles='https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+                attr='Google',
+                name='Google Hybrid',
                 overlay=False,
                 control=True
             ).add_to(satellite)
