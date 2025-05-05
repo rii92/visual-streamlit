@@ -236,6 +236,15 @@ def main_app():
         with map_tabs[1]:
             # Alternative to heatmap using circle markers
             heatmap = folium.Map(location=[-3.0, 120.0], zoom_start=6, tiles="CartoDB dark_matter")
+            folium.GeoJson(
+                mining_loc,
+                style_function=lambda feature: {
+                    'fillColor': 'green',
+                    'fillOpacity': '0.7',
+                    'color': 'red',
+                    'weight': 1.5,
+                    # 'dashArray': '5, 5'
+                }).add_to(m)
             
             # Create a heat-like visualization using circle markers
             for idx, row in mining_data.iterrows():
@@ -260,6 +269,15 @@ def main_app():
         with map_tabs[2]:
             # Satellite view with data science overlays
             satellite = folium.Map(location=[-3.0, 120.0], zoom_start=6, tiles="CartoDB positron")
+            folium.GeoJson(
+                mining_loc,
+                style_function=lambda feature: {
+                    'fillColor': 'red',
+                    'fillOpacity': '0.7',
+                    'color': 'red',
+                    'weight': 1.5,
+                    # 'dashArray': '5, 5'
+                }).add_to(m)
             
             # Add satellite imagery
             folium.TileLayer(
