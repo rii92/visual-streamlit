@@ -244,7 +244,7 @@ def main_app():
                     'color': 'red',
                     'weight': 1.5,
                     # 'dashArray': '5, 5'
-                }).add_to(m)
+                }).add_to(heatmap)
             
             # Create a heat-like visualization using circle markers
             for idx, row in mining_data.iterrows():
@@ -277,7 +277,7 @@ def main_app():
                     'color': 'red',
                     'weight': 1.5,
                     # 'dashArray': '5, 5'
-                }).add_to(m)
+                }).add_to(satellite)
             
             # Add satellite imagery
             folium.TileLayer(
