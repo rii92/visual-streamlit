@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 600px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#3498db", "font": {"color": "black"}, "id": "Pejabat 1", "label": "Pejabat 1", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 1\u003cbr\u003eJabatan: Kepala Dinas\u003cbr\u003eKabupaten: Kabupaten A\u003cbr\u003eSkor Risiko: 0.30"}, {"color": "#f39c12", "font": {"color": "black"}, "id": "Pejabat 2", "label": "Pejabat 2", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 2\u003cbr\u003eJabatan: Bupati\u003cbr\u003eKabupaten: Kabupaten B\u003cbr\u003eSkor Risiko: 0.60"}, {"color": "#f39c12", "font": {"color": "black"}, "id": "Pejabat 3", "label": "Pejabat 3", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 3\u003cbr\u003eJabatan: Sekretaris\u003cbr\u003eKabupaten: Kabupaten C\u003cbr\u003eSkor Risiko: 0.40"}, {"color": "#e74c3c", "font": {"color": "black"}, "id": "Pejabat 4", "label": "Pejabat 4", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 4\u003cbr\u003eJabatan: Anggota DPRD\u003cbr\u003eKabupaten: Kabupaten D\u003cbr\u003eSkor Risiko: 0.70"}, {"color": "#f39c12", "font": {"color": "black"}, "id": "Pejabat 5", "label": "Pejabat 5", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 5\u003cbr\u003eJabatan: Kepala Bidang\u003cbr\u003eKabupaten: Kabupaten E\u003cbr\u003eSkor Risiko: 0.50"}, {"color": "#f39c12", "font": {"color": "black"}, "id": "Pejabat 6", "label": "Pejabat 6", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 6\u003cbr\u003eJabatan: Kepala Dinas\u003cbr\u003eKabupaten: Kabupaten A\u003cbr\u003eSkor Risiko: 0.35"}, {"color": "#e74c3c", "font": {"color": "black"}, "id": "Pejabat 7", "label": "Pejabat 7", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 7\u003cbr\u003eJabatan: Bupati\u003cbr\u003eKabupaten: Kabupaten B\u003cbr\u003eSkor Risiko: 0.65"}, {"color": "#f39c12", "font": {"color": "black"}, "id": "Pejabat 8", "label": "Pejabat 8", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 8\u003cbr\u003eJabatan: Sekretaris\u003cbr\u003eKabupaten: Kabupaten C\u003cbr\u003eSkor Risiko: 0.45"}, {"color": "#e74c3c", "font": {"color": "black"}, "id": "Pejabat 9", "label": "Pejabat 9", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 9\u003cbr\u003eJabatan: Anggota DPRD\u003cbr\u003eKabupaten: Kabupaten D\u003cbr\u003eSkor Risiko: 0.75"}, {"color": "#f39c12", "font": {"color": "black"}, "id": "Pejabat 10", "label": "Pejabat 10", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 10\u003cbr\u003eJabatan: Kepala Bidang\u003cbr\u003eKabupaten: Kabupaten E\u003cbr\u003eSkor Risiko: 0.55"}, {"color": "#3498db", "font": {"color": "black"}, "id": "Pejabat 11", "label": "Pejabat 11", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 11\u003cbr\u003eJabatan: Kepala Dinas\u003cbr\u003eKabupaten: Kabupaten A\u003cbr\u003eSkor Risiko: 0.30"}, {"color": "#f39c12", "font": {"color": "black"}, "id": "Pejabat 12", "label": "Pejabat 12", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 12\u003cbr\u003eJabatan: Bupati\u003cbr\u003eKabupaten: Kabupaten B\u003cbr\u003eSkor Risiko: 0.60"}, {"color": "#f39c12", "font": {"color": "black"}, "id": "Pejabat 13", "label": "Pejabat 13", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 13\u003cbr\u003eJabatan: Sekretaris\u003cbr\u003eKabupaten: Kabupaten C\u003cbr\u003eSkor Risiko: 0.40"}, {"color": "#e74c3c", "font": {"color": "black"}, "id": "Pejabat 14", "label": "Pejabat 14", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 14\u003cbr\u003eJabatan: Anggota DPRD\u003cbr\u003eKabupaten: Kabupaten D\u003cbr\u003eSkor Risiko: 0.70"}, {"color": "#f39c12", "font": {"color": "black"}, "id": "Pejabat 15", "label": "Pejabat 15", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 15\u003cbr\u003eJabatan: Kepala Bidang\u003cbr\u003eKabupaten: Kabupaten E\u003cbr\u003eSkor Risiko: 0.50"}, {"color": "#f39c12", "font": {"color": "black"}, "id": "Pejabat 16", "label": "Pejabat 16", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 16\u003cbr\u003eJabatan: Kepala Dinas\u003cbr\u003eKabupaten: Kabupaten A\u003cbr\u003eSkor Risiko: 0.35"}, {"color": "#e74c3c", "font": {"color": "black"}, "id": "Pejabat 17", "label": "Pejabat 17", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 17\u003cbr\u003eJabatan: Bupati\u003cbr\u003eKabupaten: Kabupaten B\u003cbr\u003eSkor Risiko: 0.65"}, {"color": "#f39c12", "font": {"color": "black"}, "id": "Pejabat 18", "label": "Pejabat 18", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 18\u003cbr\u003eJabatan: Sekretaris\u003cbr\u003eKabupaten: Kabupaten C\u003cbr\u003eSkor Risiko: 0.45"}, {"color": "#e74c3c", "font": {"color": "black"}, "id": "Pejabat 19", "label": "Pejabat 19", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 19\u003cbr\u003eJabatan: Anggota DPRD\u003cbr\u003eKabupaten: Kabupaten D\u003cbr\u003eSkor Risiko: 0.75"}, {"color": "#f39c12", "font": {"color": "black"}, "id": "Pejabat 20", "label": "Pejabat 20", "shape": "circle", "size": 20, "title": "Pejabat: Pejabat 20\u003cbr\u003eJabatan: Kepala Bidang\u003cbr\u003eKabupaten: Kabupaten E\u003cbr\u003eSkor Risiko: 0.55"}, {"color": "#2ecc71", "font": {"color": "black"}, "id": "PT Mining A", "label": "PT Mining A", "shape": "square", "size": 25, "title": "Perusahaan: PT Mining A\u003cbr\u003eKomoditas: Batubara\u003cbr\u003eKabupaten: Kabupaten A\u003cbr\u003eJenis Izin: IUP"}, {"color": "#2ecc71", "font": {"color": "black"}, "id": "PT Mining B", "label": "PT Mining B", "shape": "square", "size": 25, "title": "Perusahaan: PT Mining B\u003cbr\u003eKomoditas: Emas\u003cbr\u003eKabupaten: Kabupaten B\u003cbr\u003eJenis Izin: IUPK"}, {"color": "#2ecc71", "font": {"color": "black"}, "id": "PT Mining C", "label": "PT Mining C", "shape": "square", "size": 25, "title": "Perusahaan: PT Mining C\u003cbr\u003eKomoditas: Tembaga\u003cbr\u003eKabupaten: Kabupaten C\u003cbr\u003eJenis Izin: IUP"}, {"color": "#2ecc71", "font": {"color": "black"}, "id": "PT Mining D", "label": "PT Mining D", "shape": "square", "size": 25, "title": "Perusahaan: PT Mining D\u003cbr\u003eKomoditas: Nikel\u003cbr\u003eKabupaten: Kabupaten D\u003cbr\u003eJenis Izin: IUPK"}, {"color": "#2ecc71", "font": {"color": "black"}, "id": "PT Mining E", "label": "PT Mining E", "shape": "square", "size": 25, "title": "Perusahaan: PT Mining E\u003cbr\u003eKomoditas: Besi\u003cbr\u003eKabupaten: Kabupaten E\u003cbr\u003eJenis Izin: IUP"}, {"color": "#2ecc71", "font": {"color": "black"}, "id": "PT Mining F", "label": "PT Mining F", "shape": "square", "size": 25, "title": "Perusahaan: PT Mining F\u003cbr\u003eKomoditas: Batubara\u003cbr\u003eKabupaten: Kabupaten A\u003cbr\u003eJenis Izin: IUP"}, {"color": "#2ecc71", "font": {"color": "black"}, "id": "PT Mining G", "label": "PT Mining G", "shape": "square", "size": 25, "title": "Perusahaan: PT Mining G\u003cbr\u003eKomoditas: Emas\u003cbr\u003eKabupaten: Kabupaten B\u003cbr\u003eJenis Izin: IUPK"}, {"color": "#2ecc71", "font": {"color": "black"}, "id": "PT Mining H", "label": "PT Mining H", "shape": "square", "size": 25, "title": "Perusahaan: PT Mining H\u003cbr\u003eKomoditas: Tembaga\u003cbr\u003eKabupaten: Kabupaten C\u003cbr\u003eJenis Izin: IUP"}, {"color": "#2ecc71", "font": {"color": "black"}, "id": "PT Mining I", "label": "PT Mining I", "shape": "square", "size": 25, "title": "Perusahaan: PT Mining I\u003cbr\u003eKomoditas: Nikel\u003cbr\u003eKabupaten: Kabupaten D\u003cbr\u003eJenis Izin: IUPK"}, {"color": "#2ecc71", "font": {"color": "black"}, "id": "PT Mining J", "label": "PT Mining J", "shape": "square", "size": 25, "title": "Perusahaan: PT Mining J\u003cbr\u003eKomoditas: Besi\u003cbr\u003eKabupaten: Kabupaten E\u003cbr\u003eJenis Izin: IUP"}]);
+                  edges = new vis.DataSet([{"color": "#95a5a6", "from": "Pejabat 1", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 6", "width": 4.485460764213903}, {"color": "#95a5a6", "from": "Pejabat 1", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 11", "width": 4.393251094866498}, {"color": "#95a5a6", "from": "Pejabat 1", "title": "Koneksi umum", "to": "Pejabat 13", "width": 2.237661544787924}, {"color": "#95a5a6", "from": "Pejabat 1", "title": "Koneksi umum", "to": "Pejabat 14", "width": 1.9326069677605555}, {"color": "#95a5a6", "from": "Pejabat 1", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 16", "width": 3.1045651771404748}, {"color": "#95a5a6", "from": "Pejabat 1", "title": "Koneksi umum", "to": "Pejabat 18", "width": 2.2368202975306417}, {"color": "#e74c3c", "from": "Pejabat 1", "title": "Koneksi pemilik", "to": "PT Mining A", "width": 1.5}, {"color": "#95a5a6", "from": "Pejabat 2", "title": "Koneksi umum", "to": "Pejabat 5", "width": 1.8634496428295182}, {"color": "#95a5a6", "from": "Pejabat 2", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 7", "width": 3.07565532282685}, {"color": "#95a5a6", "from": "Pejabat 2", "title": "Koneksi umum", "to": "Pejabat 16", "width": 2.4800739626450623}, {"color": "#95a5a6", "from": "Pejabat 2", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 17", "width": 4.090144253701818}, {"color": "#e74c3c", "from": "Pejabat 2", "title": "Koneksi investor", "to": "PT Mining B", "width": 3.0}, {"color": "#95a5a6", "from": "Pejabat 3", "title": "Koneksi umum", "to": "Pejabat 5", "width": 2.0271621496941963}, {"color": "#95a5a6", "from": "Pejabat 3", "title": "Koneksi umum", "to": "Pejabat 7", "width": 2.4222237969474887}, {"color": "#95a5a6", "from": "Pejabat 3", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 8", "width": 4.224415454205}, {"color": "#95a5a6", "from": "Pejabat 3", "title": "Koneksi umum", "to": "Pejabat 17", "width": 0.6833905667831492}, {"color": "#95a5a6", "from": "Pejabat 3", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 18", "width": 2.9947320013613}, {"color": "#95a5a6", "from": "Pejabat 3", "title": "Koneksi umum", "to": "Pejabat 20", "width": 1.1093659958375863}, {"color": "#e74c3c", "from": "Pejabat 3", "title": "Koneksi konsultan", "to": "PT Mining C", "width": 2.0}, {"color": "#95a5a6", "from": "Pejabat 4", "title": "Koneksi umum", "to": "Pejabat 5", "width": 2.4297215983255382}, {"color": "#95a5a6", "from": "Pejabat 4", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 9", "width": 4.208767093224923}, {"color": "#95a5a6", "from": "Pejabat 4", "title": "Koneksi umum", "to": "Pejabat 11", "width": 1.1664456222582142}, {"color": "#95a5a6", "from": "Pejabat 4", "title": "Koneksi umum", "to": "Pejabat 12", "width": 2.0476017065908625}, {"color": "#95a5a6", "from": "Pejabat 4", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 14", "width": 3.46749279803112}, {"color": "#95a5a6", "from": "Pejabat 4", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 19", "width": 2.7527415581988834}, {"color": "#95a5a6", "from": "Pejabat 5", "title": "Koneksi umum", "to": "Pejabat 9", "width": 0.9555528718425779}, {"color": "#95a5a6", "from": "Pejabat 5", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 15", "width": 3.3172584879882523}, {"color": "#e74c3c", "from": "Pejabat 5", "title": "Koneksi pemegang saham", "to": "PT Mining E", "width": 2.5}, {"color": "#95a5a6", "from": "Pejabat 6", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 11", "width": 2.562030581378539}, {"color": "#95a5a6", "from": "Pejabat 6", "title": "Koneksi umum", "to": "Pejabat 12", "width": 1.9309937808167859}, {"color": "#95a5a6", "from": "Pejabat 6", "title": "Koneksi umum", "to": "Pejabat 17", "width": 0.916121967209901}, {"color": "#95a5a6", "from": "Pejabat 6", "title": "Koneksi umum", "to": "Pejabat 19", "width": 1.8394565075884501}, {"color": "#e74c3c", "from": "Pejabat 6", "title": "Koneksi pemilik", "to": "PT Mining F", "width": 1.75}, {"color": "#95a5a6", "from": "Pejabat 7", "title": "Koneksi umum", "to": "Pejabat 10", "width": 1.2407780144910217}, {"color": "#95a5a6", "from": "Pejabat 7", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 12", "width": 3.009712722812481}, {"color": "#95a5a6", "from": "Pejabat 7", "title": "Koneksi umum", "to": "Pejabat 18", "width": 1.0885519588465884}, {"color": "#e74c3c", "from": "Pejabat 7", "title": "Koneksi investor", "to": "PT Mining G", "width": 3.25}, {"color": "#95a5a6", "from": "Pejabat 8", "title": "Koneksi umum", "to": "Pejabat 10", "width": 1.241174619314755}, {"color": "#95a5a6", "from": "Pejabat 8", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 13", "width": 3.287483283694847}, {"color": "#95a5a6", "from": "Pejabat 8", "title": "Koneksi umum", "to": "Pejabat 16", "width": 0.5274924361617079}, {"color": "#95a5a6", "from": "Pejabat 8", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 18", "width": 3.4833499381104502}, {"color": "#e74c3c", "from": "Pejabat 8", "title": "Koneksi konsultan", "to": "PT Mining H", "width": 2.25}, {"color": "#95a5a6", "from": "Pejabat 9", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 14", "width": 2.750961505650168}, {"color": "#95a5a6", "from": "Pejabat 9", "title": "Koneksi umum", "to": "Pejabat 17", "width": 2.13941365395564}, {"color": "#95a5a6", "from": "Pejabat 9", "title": "Koneksi umum", "to": "Pejabat 18", "width": 1.4879799917660044}, {"color": "#95a5a6", "from": "Pejabat 9", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 19", "width": 3.2331551732805766}, {"color": "#95a5a6", "from": "Pejabat 9", "title": "Koneksi umum", "to": "Pejabat 20", "width": 0.7784223350599313}, {"color": "#95a5a6", "from": "Pejabat 10", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 15", "width": 3.36582611857706}, {"color": "#95a5a6", "from": "Pejabat 10", "title": "Koneksi umum", "to": "Pejabat 17", "width": 1.9236994715805795}, {"color": "#95a5a6", "from": "Pejabat 10", "title": "Koneksi umum", "to": "Pejabat 18", "width": 1.0328359869131398}, {"color": "#95a5a6", "from": "Pejabat 10", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 20", "width": 3.5358849270280563}, {"color": "#e74c3c", "from": "Pejabat 10", "title": "Koneksi pemegang saham", "to": "PT Mining J", "width": 2.75}, {"color": "#95a5a6", "from": "Pejabat 11", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 16", "width": 4.919624358198252}, {"color": "#e74c3c", "from": "Pejabat 11", "title": "Koneksi pemilik", "to": "PT Mining A", "width": 1.5}, {"color": "#95a5a6", "from": "Pejabat 12", "title": "Koneksi umum", "to": "Pejabat 14", "width": 1.9064621578406031}, {"color": "#95a5a6", "from": "Pejabat 12", "title": "Koneksi umum", "to": "Pejabat 16", "width": 2.4854479219650365}, {"color": "#95a5a6", "from": "Pejabat 12", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 17", "width": 2.732580672413375}, {"color": "#95a5a6", "from": "Pejabat 12", "title": "Koneksi umum", "to": "Pejabat 20", "width": 1.491761813346244}, {"color": "#e74c3c", "from": "Pejabat 12", "title": "Koneksi investor", "to": "PT Mining B", "width": 3.0}, {"color": "#95a5a6", "from": "Pejabat 13", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 18", "width": 4.106801104409024}, {"color": "#95a5a6", "from": "Pejabat 13", "title": "Koneksi umum", "to": "Pejabat 20", "width": 1.5542738543031143}, {"color": "#e74c3c", "from": "Pejabat 13", "title": "Koneksi konsultan", "to": "PT Mining C", "width": 2.0}, {"color": "#95a5a6", "from": "Pejabat 14", "title": "Koneksi umum", "to": "Pejabat 17", "width": 0.9371426254984712}, {"color": "#95a5a6", "from": "Pejabat 14", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 19", "width": 3.7199322044034036}, {"color": "#95a5a6", "from": "Pejabat 15", "title": "Koneksi umum", "to": "Pejabat 16", "width": 0.7673805372269482}, {"color": "#95a5a6", "from": "Pejabat 15", "title": "Koneksi umum", "to": "Pejabat 17", "width": 1.2760953853376384}, {"color": "#95a5a6", "from": "Pejabat 15", "title": "Kolega di pemerintahan daerah", "to": "Pejabat 20", "width": 2.6534883356279355}, {"color": "#e74c3c", "from": "Pejabat 15", "title": "Koneksi pemegang saham", "to": "PT Mining E", "width": 2.5}, {"color": "#e74c3c", "from": "Pejabat 16", "title": "Koneksi pemilik", "to": "PT Mining F", "width": 1.75}, {"color": "#95a5a6", "from": "Pejabat 17", "title": "Koneksi umum", "to": "Pejabat 20", "width": 1.9240652043552975}, {"color": "#e74c3c", "from": "Pejabat 17", "title": "Koneksi investor", "to": "PT Mining G", "width": 3.25}, {"color": "#e74c3c", "from": "Pejabat 18", "title": "Koneksi konsultan", "to": "PT Mining H", "width": 2.25}, {"color": "#e74c3c", "from": "Pejabat 20", "title": "Koneksi pemegang saham", "to": "PT Mining J", "width": 2.75}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "barnesHut": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.3,
+            "damping": 0.09,
+            "gravitationalConstant": -80000,
+            "springConstant": 0.001,
+            "springLength": 250
+        },
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
